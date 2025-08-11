@@ -34,19 +34,25 @@ pip install fastapi uvicorn
 
 ```text
 fastApi/
-├── main.py                 # 主应用文件
-├── start_server.py         # 自动端口检测启动脚本
-├── test_port_manager.py    # 端口管理工具测试
-├── api/                    # API模块
+├── main.py                     # 主应用文件
+├── start_server.py             # 自动端口检测启动脚本
+├── requirements.txt            # Python依赖
+├── Dockerfile                  # Docker镜像构建文件 (开发)
+├── Dockerfile.prod             # Docker镜像构建文件 (生产)
+├── docker-compose.yml          # Docker Compose配置 (开发)
+├── docker-compose.prod.yml     # Docker Compose配置 (生产)
+├── docker-scripts.sh           # Docker管理脚本
+├── .dockerignore              # Docker忽略文件
+├── api/                        # API模块
 │   ├── __init__.py
-│   ├── routes.py          # 路由定义
-│   ├── models.py          # 数据模型
+│   ├── routes.py              # 路由定义
+│   ├── models.py              # 数据模型
 │   └── ...
-├── utils/                  # 工具模块
+├── utils/                      # 工具模块
 │   ├── __init__.py
-│   └── port_manager.py    # 端口管理工具
+│   └── port_manager.py        # 端口管理工具
 └── .vscode/
-    └── launch.json        # VS Code调试配置
+    └── launch.json            # VS Code调试配置
 ```
 
 运行 FastAPI 应用
@@ -74,7 +80,86 @@ python start_server.py --reload --start-port 9000
 [http://127.0.0.1:8000](http://127.0.0.1:8000) (默认端口)
 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) (API文档)
 
-### 核心概念
+## Docker 部署
+
+项目提供了完整的Docker化支持，包括开发和生产环境配置。
+
+### 🐳 Docker 文件说明
+
+- `Dockerfile` - 开发环境镜像，包含完整的开发工具
+- `Dockerfile.prod` - 生产环境镜像，多阶段构建，体积更小
+- `docker-compose.yml` - 开发环境编排
+- `docker-compose.prod.yml` - 生产环境编排
+- `.dockerignore` - Docker构建忽略文件
+
+### 🚀 快速开始
+
+使用提供的管理脚本（推荐）：
+
+```bash
+# 启动开发环境
+./docker-scripts.sh up-dev
+
+# 启动生产环境
+./docker-scripts.sh up-prod
+
+# 查看日志
+./docker-scripts.sh logs
+
+# 进入容器
+./docker-scripts.sh shell
+
+# 停止服务
+./docker-scripts.sh down
+
+# 查看所有命令
+./docker-scripts.sh help
+```
+
+### 📋 手动使用 Docker
+
+```bash
+# 开发环境
+docker-compose up -d                    # 启动开发环境
+docker-compose logs -f fastapi-app      # 查看日志
+docker-compose exec fastapi-app bash    # 进入容器
+docker-compose down                     # 停止服务
+
+# 生产环境
+docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml down
+
+# 构建镜像
+docker build -t fastapi-app:dev .                    # 开发镜像
+docker build -f Dockerfile.prod -t fastapi-app:prod . # 生产镜像
+```
+
+### 🔧 Docker 特性
+
+**开发环境特性：**
+
+- 代码热重载（通过volume挂载）
+- 完整的开发工具
+- 端口映射：8001
+- 健康检查
+
+**生产环境特性：**
+
+- 多阶段构建，镜像体积小
+- 非root用户运行
+- 资源限制
+- 自动重启策略
+- 安全优化
+
+### 🌐 访问应用
+
+启动后可通过以下地址访问：
+
+- **应用主页**: <http://localhost:8001>
+- **API 文档**: <http://localhost:8001/docs>
+- **ReDoc 文档**: <http://localhost:8001/redoc>
+
+### FastAPI 核心概念
 
 | 概念 | 示例代码 |
 | ---- | -------------------------------------------------------------- |

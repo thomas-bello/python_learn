@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  fastapi-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-dev
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app
+      - /app/.venv # 排除虚拟环境目录
+    environment:
+      - PYTHONPATH=/app
+      - ENVIRONMENT=development
+    restart: unless-stopped
+    networks:
+      - fastapi-network
+
+  # 可选：添加数据库服务
+  # postgres:
+  #   image: postgres:13
+  #   container_name: fastapi-postgres
+  #   environment:
+  #     POSTGRES_DB: fastapi_db
+  #     POSTGRES_USER: fastapi_user
+  #     POSTGRES_PASSWORD: fastapi_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - fastapi-network
+
+  # 可选：添加Redis服务
+  # redis:
+  #   image: redis:6-alpine
+  #   container_name: fastapi-redis
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - fastapi-network
+
+networks:
+  fastapi-network:
+    driver: bridge
+# volumes:
+#   postgres_data:
