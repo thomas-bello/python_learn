@@ -1,0 +1,35 @@
+
+# 查询所有条目
+GET http://127.0.0.1:8000/items/
+Accept: application/json
+
+###
+# 创建新条目
+POST http://127.0.0.1:8000/items/
+Content-Type: application/json
+
+{
+	"id": 1,
+	"name": "Item One",
+	"description": "第一个条目"
+}
+
+###
+# 查询单个条目
+GET http://127.0.0.1:8000/items/1
+Accept: application/json
+
+###
+# 更新条目
+PUT http://127.0.0.1:8000/items/1
+Content-Type: application/json
+
+{
+	"id": 1,
+	"name": "Item One Updated",
+	"description": "更新后的描述"
+}
+
+###
+# 删除条目
+DELETE http://127.0.0.1:8000/items/1
