@@ -30,14 +30,49 @@ pip install fastapi uvicorn
 
 创建 [main.py](./main.py)
 
+## 项目结构
+
+```text
+fastApi/
+├── main.py                 # 主应用文件
+├── start_server.py         # 自动端口检测启动脚本
+├── test_port_manager.py    # 端口管理工具测试
+├── api/                    # API模块
+│   ├── __init__.py
+│   ├── routes.py          # 路由定义
+│   ├── models.py          # 数据模型
+│   └── ...
+├── utils/                  # 工具模块
+│   ├── __init__.py
+│   └── port_manager.py    # 端口管理工具
+└── .vscode/
+    └── launch.json        # VS Code调试配置
+```
+
 运行 FastAPI 应用
 
 ```bash
+# 方式1：使用uvicorn (固定端口)
 uvicorn main:app --reload
+
+# 方式2：直接运行main.py (自动查找可用端口)
+python main.py
+
+# 方式3：使用启动脚本 (自动查找可用端口)
+python start_server.py --reload
+
+# 方式4：指定起始端口
+python start_server.py --reload --start-port 9000
 ```
 
-[http://127.0.0.1:8000](http://127.0.0.1:8000)
-[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+**自动端口检测功能：**
+
+- 如果端口8001被占用，会自动尝试8002、8003...直到找到可用端口
+- 最多尝试100个端口
+- 启动时会显示实际使用的端口号和访问链接
+
+[http://127.0.0.1:8000](http://127.0.0.1:8000) (默认端口)
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) (API文档)
 
 ### 核心概念
 

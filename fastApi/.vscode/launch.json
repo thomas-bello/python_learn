@@ -2,14 +2,32 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "FastAPI: uvicorn",
+      "name": "FastAPI: uvicorn (自动端口)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "program": "${workspaceFolder}/start_server.py",
+      "args": [
+        "--reload",
+        "--start-port",
+        "8001"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/",
+      "env": {},
+      "justMyCode": true
+    },
+    {
+      "name": "FastAPI: uvicorn (固定端口)",
       "type": "debugpy",
       "request": "launch",
       "python": "${workspaceFolder}/.venv/bin/python",
       "module": "uvicorn",
       "args": [
         "main:app",
-        "--reload"
+        "--reload",
+        "--port",
+        "8001"
       ],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}/",
